@@ -16,7 +16,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-3xl font-semibold">Virtual Event Platform</h1>
             <div>
-                <a href="chat.html" class="text-white">Chat</a> <!-- Added Chat link -->
+                <a href="chat.html" class="text-white">Chat</a>
                 <span class="mx-2 text-white">|</span>
                 <a href="profile.html" class="text-white">Profile</a>
                 <span class="mx-2 text-white">|</span>
@@ -86,6 +86,22 @@
             }
         }
 
+        // Function to add an edit button for each event
+        function addEditButton(event, listItem) {
+            const editButton = document.createElement('button');
+            editButton.innerText = 'Edit';
+            editButton.classList.add('bg-blue-500', 'text-white', 'p-2', 'rounded', 'w-full', 'mt-2');
+            editButton.addEventListener('click', () => redirectToEditPage(event));
+            listItem.appendChild(editButton);
+        }
+
+        // Function to redirect to the edit page with event details
+        function redirectToEditPage(event) {
+            // Replace this URL with the actual edit page URL and append event details as query parameters
+            const editPageURL = `eventManagement.html?eventName=${encodeURIComponent(event.name)}&eventDate=${encodeURIComponent(event.date)}&eventTime=${encodeURIComponent(event.time)}`;
+            window.location.href = editPageURL;
+        }
+
         // Function to display events dynamically
         function displayEvents() {
             const eventListView = document.getElementById('eventListView');
@@ -99,6 +115,7 @@
                     <p class="text-sm text-gray-600">Date: ${event.date}</p>
                     <p class="text-sm text-gray-600">Time: ${event.time}</p>
                 `;
+                addEditButton(event, listItem); // Add edit button
                 eventListView.appendChild(listItem);
             });
         }
