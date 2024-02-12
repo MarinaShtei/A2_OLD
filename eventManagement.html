@@ -63,12 +63,22 @@
                     <textarea id="eventDescription" name="eventDescription" rows="4" required
                               class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
-                 <!-- Participants Section -->
-                <div>
-                <label for="participants" class="block text-sm font-medium text-gray-700">Participants:</label>
-                <input type="text" id="participants" name="participants" placeholder="Enter participant names separated by commas"
-                       class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                <p class="text-xs text-gray-500">Enter participant names separated by commas.</p>
+                  <!-- Participants Section -->
+                  <div>
+                    <label for="participants" class="block text-sm font-medium text-gray-700">Participants:</label>
+                    <select id="participants" name="participants" multiple
+                            class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </select>
+                    <p class="text-xs text-gray-500">Select participants from the list.</p>
+                </div>
+
+                <!-- Selected Participants Section -->
+
+                <div id="selectedParticipantsSection" class="mt-4">
+                    <h3 class="text-lg font-semibold mb-2">Selected Participants:</h3>
+                    <ul id="selectedParticipantsList" class="list-disc list-inside">
+                        <!-- Selected participants will be displayed here -->
+                    </ul>
                 </div>
 
                    <!-- Map Location Section -->
@@ -122,19 +132,59 @@
             localStorage.removeItem('currentUser');
             window.location.href = 'login.html';
         }
-    </script>
-    <script>
-            var participants = ['John', 'Alice', 'Bob', 'Emma', 'Michael'];
-    
-            // Populate participants dropdown
-            var participantsDropdown = document.getElementById('participants');
-            participants.forEach(function(participant) {
-                var option = document.createElement('option');
-                option.value = participant;
-                option.text = participant;
-                participantsDropdown.appendChild(option);
+
+        // Define the participantsInput variable and reference the <select> element
+        var participantsInput = document.getElementById('participants');
+
+        // Array of fake participant names
+        var fakeParticipants = ['John', 'Alice', 'Bob', 'Emma', 'Michael'];
+
+        // Populate participants dropdown with fake data
+        fakeParticipants.forEach(function(participant) {
+            var option = document.createElement('option');
+            option.value = participant;
+            option.textContent = participant;
+            participantsInput.appendChild(option);
+        });
+
+        // Update selected participants section
+        function updateSelectedParticipants() {
+            var selectedParticipantsList = document.getElementById('selectedParticipantsList');
+            // Clear existing content
+            selectedParticipantsList.innerHTML = '';
+
+            // Add selected participants to the list
+            selectedParticipants.forEach(function(participant) {
+                var listItem = document.createElement('li');
+                listItem.textContent = participant;
+                listItem.classList.add('mb-1', 'cursor-pointer', 'hover:text-red-500');
+                // Add click event listener to remove participant
+                listItem.addEventListener('click', function() {
+                    removeParticipant(participant);
+                });
+                selectedParticipantsList.appendChild(listItem);
             });
+        }
+
+        // Remove participant from selected participants
+        function removeParticipant(participant) {
+            var index = selectedParticipants.indexOf(participant);
+            if (index !== -1) {
+                selectedParticipants.splice(index, 1);
+                updateSelectedParticipants(); // Update selected participants section
+            }
+        }
+
+        // Update selected participants section whenever the selection changes
+        participantsInput.addEventListener('change', function(event) {
+            var selectedOptions = event.target.selectedOptions;
+            selectedParticipants = Array.from(selectedOptions).map(option => option.value);
+            updateSelectedParticipants();
+        });
+
+        
     </script>
+    
 
 </body>
 
